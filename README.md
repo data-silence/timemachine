@@ -1,3 +1,4 @@
+![logo](https://github.com/data-silence/newsrucom-dataset-eda/blob/master/logo.png?raw=True)
 # Table of contents
 
 * [About](#about)
