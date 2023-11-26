@@ -8,8 +8,8 @@ Handlers (handlers) pass the bot user's requests to News, and take the results o
 Обработчики (хэндлеры) передают в News запросы пользователя бота, и забирают отсюда результаты обработки новостей
 """
 
-from imports.imports import DataBaseMixin, AgglomerativeClustering, time_machine, dt, pd, Counter, sns
-from scripts.processors import news2emb
+from imports.imports import DataBaseMixin, AgglomerativeClustering, time_machine, dt, pd, Counter, sns, plt
+from scripts.processors import news2emb, find_sim_news
 
 
 class News(DataBaseMixin):
@@ -118,14 +118,36 @@ class News(DataBaseMixin):
                 category_digest += '\n'
         return category_digest
 
-    def plot_categories(self):
+    def plot_categories(self) -> None:
         """
-        Draws a graph of the distribution of news by category
-        Рисует график распределения новостей в разрезе категорий
+        Creates and saves a graph of news distribution by category
+        Создаёт и сохраняет график распределения новостей в разрезе категорий
         """
         sns.set(style="darkgrid")
         df = pd.DataFrame(self.date_news)
-        my_plot = sns.countplot(y=df.category, palette='tab10', orient='v')
-        my_plot.set_title("Распределение новостей по категориям на запрошенную дату:", fontsize=12)
+        my_plot = sns.countplot(x=df.category, palette='tab10', hue=df.category.values, legend=False)
+        my_plot.set_title(f"Распределение новостей по категориям на {self.date.strftime('%d %B %Y')}:", fontsize=12)
         my_plot.set_xlabel("", fontsize=8)
         my_plot.set_ylabel("", fontsize=8)
+        plt.savefig('./graphs/cat_distr.png')
+
+    def get_best_news(self, user_news: str) -> str:
+        """
+        :param user_news: search query for news from a user | поисковый запрос новости от пользователя
+        :return: the news most similar to a user request | новость, наиболее похожая на пользовательский запрос
+        """
+        result_news_list = []
+        best_category = ...
+
+        df = pd.DataFrame(self.categories_news_dict[best_category])
+        best_news = find_sim_news(df, user_news)
+        date_time, category, title, resume, link = best_news.date.iloc[0].strftime("%d %B %Y - %H:%m"), \
+            best_news.category.iloc[0], best_news.title.iloc[0], best_news.resume.iloc[0], best_news.url.iloc[0]
+        result_news_list.append('\n')
+        result_news_list.append(category)
+        result_news_list.append('\n')
+        result_news_list.append(title)
+        result_news_list.append('\n\n')
+        result_news_list.append(resume)
+        result_news = ''.join(result_news_list)
+        return result_news

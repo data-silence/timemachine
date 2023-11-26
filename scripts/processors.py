@@ -3,8 +3,9 @@ Here you will find auxiliary functions that are used to operate the main classes
 Здесь находятся вспомогательные функции, которые используются для работы основных классов и функций
 """
 
-from imports.imports import re, navec, np, dt
+from imports.imports import re, navec, np, dt, norm, pd
 import logging
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 
 def get_clean_word(word: str) -> str:
@@ -48,3 +49,25 @@ def validate_user_date(user_date: str):
     except ValueError:
         logging.error(
             'Мы понимаем дату в формате ГГГГ-ММ-ДД (например, "2015-06-20"). А вы где-то ошиблись, попробуйте ещё раз.')
+
+
+def cos_simularity(a, b):
+    cos_sim = np.dot(a, b) / (norm(a) * norm(b))
+    return cos_sim
+
+
+def find_sim_news(df: pd.DataFrame, user_sent: str):
+    q_emb = news2emb(user_sent)
+    df['sim'] = df['embeddings'].apply(lambda x: cos_simularity(q_emb, x))
+    best_result = df[df.sim == df.sim.max()]
+    return best_result
+
+
+def make_row_keyboard(items: list[str]) -> ReplyKeyboardMarkup:
+    """
+    Создаёт реплай-клавиатуру с кнопками в один ряд
+    :param items: список текстов для кнопок
+    :return: объект реплай-клавиатуры
+    """
+    row = [KeyboardButton(text=item) for item in items]
+    return ReplyKeyboardMarkup(keyboard=[row], resize_keyboard=True)

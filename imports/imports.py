@@ -10,6 +10,7 @@ import datetime as dt
 import re
 import logging
 from collections import Counter
+from numpy.linalg import norm
 
 # ML libs:
 import numpy as np
@@ -19,9 +20,12 @@ from navec import Navec
 
 # Other libs
 import asyncio
-import seaborn as sns
 from dotenv import load_dotenv
 from sqlalchemy import create_engine, text
+
+# Graphs
+import seaborn as sns
+import matplotlib.pyplot as plt
 sns.set(style="darkgrid")
 
 
