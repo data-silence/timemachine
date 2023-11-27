@@ -63,6 +63,12 @@ def find_sim_news(df: pd.DataFrame, user_sent: str):
     return best_result
 
 
+kb = [
+    [KeyboardButton(text='Календарь')]
+]
+start_kb = ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
+action_kb = ["График", "Поиск"]
+
 def make_row_keyboard(items: list[str]) -> ReplyKeyboardMarkup:
     """
     Создаёт реплай-клавиатуру с кнопками в один ряд
@@ -71,3 +77,6 @@ def make_row_keyboard(items: list[str]) -> ReplyKeyboardMarkup:
     """
     row = [KeyboardButton(text=item) for item in items]
     return ReplyKeyboardMarkup(keyboard=[row], resize_keyboard=True)
+
+
+

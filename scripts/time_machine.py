@@ -137,12 +137,13 @@ class News(DataBaseMixin):
         :return: the news most similar to a user request | новость, наиболее похожая на пользовательский запрос
         """
         result_news_list = []
-        best_category = ...
+        best_category = 'society'
 
         df = pd.DataFrame(self.categories_news_dict[best_category])
         best_news = find_sim_news(df, user_news)
         date_time, category, title, resume, link = best_news.date.iloc[0].strftime("%d %B %Y - %H:%m"), \
             best_news.category.iloc[0], best_news.title.iloc[0], best_news.resume.iloc[0], best_news.url.iloc[0]
+        result_news_list.append(date_time)
         result_news_list.append('\n')
         result_news_list.append(category)
         result_news_list.append('\n')
