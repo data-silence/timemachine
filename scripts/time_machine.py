@@ -9,7 +9,7 @@ Handlers (handlers) pass the bot user's requests to News, and take the results o
 """
 
 from imports.imports import DataBaseMixin, AgglomerativeClustering, time_machine, dt, pd, Counter, sns, plt
-from scripts.processors import news2emb, find_sim_news
+from scripts.utils import news2emb, find_sim_news
 
 
 class News(DataBaseMixin):
@@ -37,7 +37,7 @@ class News(DataBaseMixin):
         Gets news on a given date from the past
         Получает новости на заданную дату из прошлого
         """
-        q = f"SELECT * FROM news WHERE date::date = '{self.date}'"
+        q = f"SELECT * FROM news WHERE date::date = '{self.date}' and agency = 'newsru.com'"
         date_news = DataBaseMixin.get(q, time_machine)
         return date_news
 
@@ -103,7 +103,7 @@ class News(DataBaseMixin):
         Transforms a list of the most popular news in categories retrieved by get_top_cluster_news into a digest
         Трансформирует в дайджест список самых популярных новостей в категориях, полученных get_top_cluster_news
         """
-        category_digest = f'<b>🏎 {self.date.strftime("%d %B %Y"):^10} {"💨" * 3} </b>\n'
+        category_digest = f'<b>🏎   {self.date.strftime("%d %B %Y")}   {"💨" * 3} </b>\n'
 
         for category in self.categories:
             category_cluster_news = self.get_top_cluster_news(category=category,
@@ -126,7 +126,8 @@ class News(DataBaseMixin):
         sns.set(style="darkgrid")
         df = pd.DataFrame(self.date_news)
         my_plot = sns.countplot(x=df.category, palette='tab10', hue=df.category.values, legend=False)
-        my_plot.set_title(f"Распределение новостей по категориям на {self.date.strftime('%d %B %Y')}:", fontsize=12)
+        my_plot.set_title(
+            f"Распределение {len(df)} новостей по категориям на {self.date.strftime('%d %B %Y')}:", fontsize=12)
         my_plot.set_xlabel("", fontsize=8)
         my_plot.set_ylabel("", fontsize=8)
         plt.savefig('./graphs/cat_distr.png')
@@ -141,14 +142,12 @@ class News(DataBaseMixin):
 
         df = pd.DataFrame(self.categories_news_dict[best_category])
         best_news = find_sim_news(df, user_news)
-        date_time, category, title, resume, link = best_news.date.iloc[0].strftime("%d %B %Y - %H:%m"), \
-            best_news.category.iloc[0], best_news.title.iloc[0], best_news.resume.iloc[0], best_news.url.iloc[0]
-        result_news_list.append(date_time)
-        result_news_list.append('\n')
-        result_news_list.append(category)
-        result_news_list.append('\n')
-        result_news_list.append(title)
-        result_news_list.append('\n\n')
+        date_time, title, resume, link = (best_news.date.iloc[0].strftime("%H:%m"), best_news.title.iloc[0],
+                                          best_news.resume.iloc[0], best_news.url.iloc[0])
+        result_news_list.append('Определили категорию: \n' + self.categories_dict[best_category]['emoj'] + ' ' +
+                                self.categories_dict[best_category]['russian_title'] + '\n')
+        result_news_list.append(f'Лучшая найденная новость\n⌚ опубликована в {date_time}:\n')
+        result_news_list.append(f'<a href="{link}">{title}</a>\n')
         result_news_list.append(resume)
-        result_news = ''.join(result_news_list)
+        result_news = '\n'.join(result_news_list)
         return result_news

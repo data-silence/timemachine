@@ -28,6 +28,18 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 sns.set(style="darkgrid")
 
+# Aiogram
+# from aiogram import Router, F
+# from aiogram.fsm.context import FSMContext
+# from aiogram.fsm.state import StatesGroup, State
+# from aiogram.types import FSInputFile, CallbackQuery, Message, ReplyKeyboardRemove
+# from aiogram.filters import CommandStart
+# from aiogram.filters.callback_data import CallbackData
+# from aiogram_calendar import DialogCalendar, DialogCalendarCallback
+#
+# from aiogram import Bot, Dispatcher
+# from aiogram.fsm.storage.memory import MemoryStorage
+
 
 load_dotenv()
 
