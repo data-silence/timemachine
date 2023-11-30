@@ -9,7 +9,9 @@
 
 ## About project
 
-This repository is an attempt to create an aggregator of the Past based on a Telegram bot - [@time_mashine_bot](https://t.me/time_mashine_bot)
+Timemachine - the NLP project based on newsru.com dataset.
+
+This is an attempt to create an aggregator of the Past based on a Telegram bot - [@time_mashine_bot](https://t.me/time_mashine_bot)
 
 At the moment, the first stage of the project has been realized: aggregator of news of the past has been created on the basis of materials of the agency [newsru.com](https://www.newsru.com/)
 
