@@ -1,28 +1,15 @@
-from aiogram import F, Router
-from aiogram.filters import Command
-# from aiogram.filters import StateFilter
-from aiogram.fsm.context import FSMContext
-# from aiogram.fsm.state import default_state
-from aiogram.types import Message, ReplyKeyboardRemove
-from scripts.keyboards import make_row_keyboard, action_kb
+from imports.imports import Router, Command, F, Message, FSMContext
+from imports.imports import DialogCalendar
+from imports.imports import help_text, donate_text
+
 from scripts.handlers import ChoiseState
-from aiogram_calendar import DialogCalendar
 
-router = Router()
+common_router = Router()
 
 
-# @router.message(StateFilter(None), Command(commands=["cancel"]))
-# @router.message(default_state, F.text.lower() == "отмена")
-# async def cmd_cancel_no_state(message: Message, state: FSMContext):
-#     # Стейт сбрасывать не нужно, удалим только данные
-#     await state.set_data({})
-#     await message.answer(
-#         text="Нечего отменять",
-#         reply_markup=ReplyKeyboardRemove()
-#     )
-
-@router.message(Command(commands=["start"]))
-async def cmd_start(message: Message, state: FSMContext):
+@common_router.message(Command(commands=["start"]))
+@common_router.message(F.text.lower() == "старт")
+async def start_handler(message: Message, state: FSMContext):
     await state.set_data({})
     await state.clear()
     await message.answer(
@@ -35,15 +22,32 @@ async def cmd_start(message: Message, state: FSMContext):
     await state.set_state(ChoiseState.choosing_date)
 
 
-
-
-@router.message(Command(commands=["cancel"]))
-@router.message(F.text.lower() == "отмена")
-async def cmd_cancel(message: Message, state: FSMContext):
+@common_router.message(Command(commands=["cancel"]))
+@common_router.message(F.text.lower() == "отмена")
+async def cancel_handler(message: Message, state: FSMContext):
     await state.clear()
     await state.set_data({})
     await message.answer(
-        text="Снова готовы к старту",
+        text="Снова готовы к старту двигателей",
+        reply_markup=await DialogCalendar().start_calendar(2010)
+    )
+    await state.set_state(ChoiseState.choosing_date)
+
+
+@common_router.message(Command(commands=["help"]))
+@common_router.message(F.text.lower() == "помощь")
+async def help_handler(message: Message, state: FSMContext):
+    await message.answer(
+        text=help_text,
+        reply_markup=await DialogCalendar().start_calendar(2010)
+    )
+    await state.set_state(ChoiseState.choosing_date)
+
+
+@common_router.message(Command(commands=["donate"]))
+async def donate_handler(message: Message, state: FSMContext):
+    await message.answer(
+        text=donate_text,
         reply_markup=await DialogCalendar().start_calendar(2010)
     )
     await state.set_state(ChoiseState.choosing_date)

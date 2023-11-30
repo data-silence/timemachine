@@ -1,6 +1,6 @@
 """
 This is where the libraries are imported, and the supporting tools for working with the news database are defined
-Здесь импортируются библиотеки, и определяются вспомогательные инструменты для работы с базой данных новостей
+Здесь импортируются библиотеки, и задаются вспомогательные инструменты для работы с базой данных новостей
 """
 
 # Common libs:
@@ -18,27 +18,55 @@ import pandas as pd
 from sklearn.cluster import AgglomerativeClustering
 from navec import Navec
 
+# Fasttext
+import warnings
+import fasttext
+warnings.filterwarnings("ignore")
+fasttext.FastText.eprint = lambda x: None
+model_class = fasttext.load_model("models//cat_model.ftz")
+
+
+# Aiogram
+from aiogram import Bot, Dispatcher, Router, F
+from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import StatesGroup, State
+from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram.types import FSInputFile, CallbackQuery, Message
+from aiogram.filters import CommandStart, Command
+from aiogram.filters.callback_data import CallbackData
+
+from aiogram_calendar import DialogCalendar, DialogCalendarCallback
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
+
+
+
+
 # Other libs
 import asyncio
 from dotenv import load_dotenv
 from sqlalchemy import create_engine, text
+model_class = fasttext.load_model("models//cat_model.ftz")
 
 # Graphs
 import seaborn as sns
 import matplotlib.pyplot as plt
+
 sns.set(style="darkgrid")
 
-# Aiogram
-# from aiogram import Router, F
-# from aiogram.fsm.context import FSMContext
-# from aiogram.fsm.state import StatesGroup, State
-# from aiogram.types import FSInputFile, CallbackQuery, Message, ReplyKeyboardRemove
-# from aiogram.filters import CommandStart
-# from aiogram.filters.callback_data import CallbackData
-# from aiogram_calendar import DialogCalendar, DialogCalendarCallback
-#
-# from aiogram import Bot, Dispatcher
-# from aiogram.fsm.storage.memory import MemoryStorage
+help_text = ('📕 Всё просто: следуй за инструкциями и нажимай кнопки.\nЕсли что-то пошло не так, попробуй  '
+             '/clear или /start. Если не помогает - жми "Очистить историю" в настройках бота, и стартуй '
+             'заново\n\nP.S. Если бот понравится, можешь помочь автору оплачивать сервера. По команде /donate можно '
+             'узнать, как это сделать.')
+
+donate_text = ('💰 Если тебе нравится бот и ты им пользуешься, можно помочь автору в его поддержке.\n\nРоссия: 2202 '
+               '2032 1457 8041\n\nЗарубеж:\nКарта: 4374 6901 0055 5257\nIBAN $: TR41 0013 4000 0210 3974 9000 '
+               '02\nIBAN €: TR14 0013 4000 0210 3974 9000 03\nIBAN ₽: TR84 0013 4000 0210 3974 9000 04')
+
+
+class ChoiseState(StatesGroup):
+    choosing_date = State()
+    choosing_action = State()
+    choosing_query = State()
 
 
 load_dotenv()

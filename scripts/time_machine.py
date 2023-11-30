@@ -8,7 +8,7 @@ Handlers (handlers) pass the bot user's requests to News, and take the results o
 Обработчики (хэндлеры) передают в News запросы пользователя бота, и забирают отсюда результаты обработки новостей
 """
 
-from imports.imports import DataBaseMixin, AgglomerativeClustering, time_machine, dt, pd, Counter, sns, plt
+from imports.imports import DataBaseMixin, AgglomerativeClustering, time_machine, dt, pd, Counter, sns, plt, model_class
 from scripts.utils import news2emb, find_sim_news
 
 
@@ -138,7 +138,7 @@ class News(DataBaseMixin):
         :return: the news most similar to a user request | новость, наиболее похожая на пользовательский запрос
         """
         result_news_list = []
-        best_category = 'society'
+        best_category = model_class.predict(user_news)[0][0].split('__')[-1]
 
         df = pd.DataFrame(self.categories_news_dict[best_category])
         best_news = find_sim_news(df, user_news)
@@ -146,7 +146,7 @@ class News(DataBaseMixin):
                                           best_news.resume.iloc[0], best_news.url.iloc[0])
         result_news_list.append('Определили категорию: \n' + self.categories_dict[best_category]['emoj'] + ' ' +
                                 self.categories_dict[best_category]['russian_title'] + '\n')
-        result_news_list.append(f'Лучшая найденная новость\n⌚ опубликована в {date_time}:\n')
+        result_news_list.append(f'Самая близкая новость\n⌚ опубликована в {date_time}:\n')
         result_news_list.append(f'<a href="{link}">{title}</a>\n')
         result_news_list.append(resume)
         result_news = '\n'.join(result_news_list)
