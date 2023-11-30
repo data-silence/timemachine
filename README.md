@@ -1,4 +1,4 @@
-![logo](https://github.com/data-silence/newsrucom-dataset-eda/blob/master/logo.png?raw=True)
+![logo](https://github.com/data-silence/newsrucom-dataset-eda/blob/master/graphs/logo.png?raw=true)
 # Table of contents
 
 * [About](#about-project)
