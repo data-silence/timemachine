@@ -9,6 +9,7 @@ action_kb = ["График", "Поиск"]
 
 def make_row_keyboard(items: list[str]) -> ReplyKeyboardMarkup:
     """
+    Creates a replay keyboard with buttons in a single row
     Создаёт реплай-клавиатуру с кнопками в один ряд
     :param items: список текстов для кнопок
     :return: объект реплай-клавиатуры

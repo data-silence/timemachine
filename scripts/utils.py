@@ -3,8 +3,8 @@ Here you will find auxiliary functions that are used to operate the main classes
 Здесь находятся вспомогательные функции, которые используются для работы основных классов и функций
 """
 
-from imports.imports import re, navec, np, dt, norm, pd
-import logging
+from imports.imports import re, navec, np, norm, pd
+# import logging
 
 
 def get_clean_word(word: str) -> str:
@@ -36,21 +36,7 @@ def news2emb(news: str) -> np.ndarray:
     return news_emb
 
 
-def validate_user_date(user_date: str):
-    try:
-        final_date = dt.datetime.strptime(user_date, '%Y-%m-%d').date()
-        if dt.datetime(2000, 8, 28) <= final_date <= dt.datetime(2021, 5, 31):
-            return final_date
-        else:
-            logging.error(
-                'Мы знаем новости за период с 28 августа 2000 года по 31 мая 2021, остальные нам не знакомы. '
-                'Попробуйте ещё раз, пожалуйста')
-    except ValueError:
-        logging.error(
-            'Мы понимаем дату в формате ГГГГ-ММ-ДД (например, "2015-06-20"). А вы где-то ошиблись, попробуйте ещё раз.')
-
-
-def cos_simularity(a, b):
+def cos_simularity(a, b) -> float:
     cos_sim = np.dot(a, b) / (norm(a) * norm(b))
     return cos_sim
 
@@ -60,3 +46,17 @@ def find_sim_news(df: pd.DataFrame, user_sent: str):
     df['sim'] = df['embeddings'].apply(lambda x: cos_simularity(q_emb, x))
     best_result = df[df.sim == df.sim.max()]
     return best_result
+
+# def validate_user_date(user_date: str):
+#     try:
+#         final_date = dt.datetime.strptime(user_date, '%Y-%m-%d').date()
+#         if dt.datetime(2000, 8, 28) <= final_date <= dt.datetime(2021, 5, 31):
+#             return final_date
+#         else:
+#             logging.error(
+#                 'Мы знаем новости за период с 28 августа 2000 года по 31 мая 2021, остальные нам не знакомы. '
+#                 'Попробуйте ещё раз, пожалуйста')
+#     except ValueError:
+#         logging.error(
+#             'Мы понимаем дату в формате ГГГГ-ММ-ДД (например, "2015-06-20").
+#             А вы где-то ошиблись, попробуйте ещё раз.')

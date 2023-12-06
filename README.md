@@ -27,7 +27,7 @@ This work is a demonstration of my skills as a data-science professional to addr
 
 ## Project structure
 
-Materials related to collecting and analyzing the dataset can be found in the researh_notebooks directory.
+Materials related to collecting and analyzing the dataset (parser, EDA, etc.) can be found in the researh_notebooks directory.
 
 The other directories are parts of the telegram bot:
 - imports: contains files with imports of the necessary libraries;
@@ -45,8 +45,6 @@ The app.py file is the entry point for the bot.
 
 ## About datasource
 
-
-This is Exploratory Data Analysis (EDA) and its developing and of newsru.com dataset
 
 [Newsru.com](https://www.newsru.com/) is a Russian online media agency that existed from August 28, 2000 to May 31, 2021 as a news agency, and since June 1, 2021 has existed in the format of a news archive for the entire time of its operation.
 

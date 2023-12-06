@@ -77,7 +77,7 @@ async def invite_to_search(message: Message, state: FSMContext) -> None:
 
 
 @router.message(ChoiseState.choosing_action, F.text.casefold() == "выбрать другую дату")
-async def invite_to_search(message: Message, state: FSMContext) -> None:
+async def choise_another_date(message: Message, state: FSMContext) -> None:
     await state.clear()
     await state.set_data({})
     await message.answer(
