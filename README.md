@@ -1,4 +1,4 @@
-![logo](https://github.com/data-silence/newsrucom-dataset-eda/blob/master/graphs/logo.png?raw=true)
+![logo](https://github.com/data-silence/timemachine/blob/master/graphs/tm.jpg?raw=true)
 
 ![Pandas](https://img.shields.io/badge/Pandas-black?style=flat-square&logo=Pandas) ![Numpy](https://img.shields.io/badge/Numpy-black?style=flat-square&logo=Numpy) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-black?style=flat-square&logo=PostgreSQL) ![Docker](https://img.shields.io/badge/Docker-black?style=flat-square&logo=Docker) ![aiogram](https://img.shields.io/badge/aiogram-black?style=flat-square&logo=aiogram) ![sklearn](https://img.shields.io/badge/sklearn-black?style=flat-square&logo=sklearn)
 
