@@ -7,9 +7,12 @@ Handlers (handlers) pass the bot user's requests to News, and take the results o
 Атрибуты и методы класса позволяют получить любую информацию, которую предназначен выдавать бот по запросу
 Обработчики (хэндлеры) передают в News запросы пользователя бота, и забирают отсюда результаты обработки новостей
 """
+import pymorphy2
+from wordcloud import WordCloud
 
-from imports.imports import DataBaseMixin, AgglomerativeClustering, time_machine, dt, pd, Counter, sns, plt, model_class
-from scripts.utils import news2emb, find_sim_news
+from imports.imports import DataBaseMixin, AgglomerativeClustering, time_machine, dt, pd, Counter, sns, plt, \
+    model_class, stop_words
+from scripts.utils import news2emb, find_sim_news, pymorphy2_311_hotfix
 
 
 class News(DataBaseMixin):
@@ -118,19 +121,43 @@ class News(DataBaseMixin):
                 category_digest += '\n'
         return category_digest
 
+    # def plot_categories(self) -> None:
+    #     """
+    #     Creates and saves a graph of news distribution by category
+    #     Создаёт и сохраняет график распределения новостей в разрезе категорий
+    #     """
+    #     sns.set(style="darkgrid")
+    #     df = pd.DataFrame(self.date_news)
+    #     my_plot = sns.countplot(x=df.category, palette='tab10', hue=df.category.values, legend=False)
+    #     my_plot.set_title(
+    #         f"Распределение {len(df)} новостей по категориям на {self.date.strftime('%d %B %Y')}:", fontsize=12)
+    #     my_plot.set_xlabel("", fontsize=8)
+    #     my_plot.set_ylabel("", fontsize=8)
+    #     plt.savefig('./graphs/cat_distr.png')
+
     def plot_categories(self) -> None:
         """
-        Creates and saves a graph of news distribution by category
-        Создаёт и сохраняет график распределения новостей в разрезе категорий
+        Creates and saves a graph of news world cloud
+        Создаёт и сохраняет график облака новостей
         """
-        sns.set(style="darkgrid")
+        pymorphy2_311_hotfix()
+        morph = pymorphy2.MorphAnalyzer()
+
         df = pd.DataFrame(self.date_news)
-        my_plot = sns.countplot(x=df.category, palette='tab10', hue=df.category.values, legend=False)
-        my_plot.set_title(
-            f"Распределение {len(df)} новостей по категориям на {self.date.strftime('%d %B %Y')}:", fontsize=12)
-        my_plot.set_xlabel("", fontsize=8)
-        my_plot.set_ylabel("", fontsize=8)
-        plt.savefig('./graphs/cat_distr.png')
+        words = df.title.str.split(' ').explode().values
+        words = [morph.parse(word)[0].normal_form for word in words if
+                 morph.parse(word)[0].normal_form not in stop_words]
+
+        wc = WordCloud(background_color="black", width=1600, height=800)
+        wc.generate(" ".join(words))
+
+        fig, ax = plt.subplots(1, 1, figsize=(20, 10))
+        # plt.axis("off")
+        plt.tight_layout(pad=0)
+        ax.set_title(f"Picture of the day", fontsize=30)
+        ax.imshow(wc, alpha=0.98)
+        plt.axis("off")
+        plt.savefig('./graphs/cat_distr.png') # timemachine
 
     def get_best_news(self, user_news: str) -> str:
         """

@@ -4,12 +4,11 @@ kb = [
     [KeyboardButton(text='Календарь')]
 ]
 start_kb = ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
-action_kb = ["График", "Поиск"]
+action_kb = ["Облако", "Поиск"]
 
 
 def make_row_keyboard(items: list[str]) -> ReplyKeyboardMarkup:
     """
-    Creates a replay keyboard with buttons in a single row
     Создаёт реплай-клавиатуру с кнопками в один ряд
     :param items: список текстов для кнопок
     :return: объект реплай-клавиатуры

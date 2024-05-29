@@ -1,5 +1,3 @@
-version: '3'
-
 services:
 
     bot:
@@ -9,3 +7,8 @@ services:
         restart: always
         image: maxlethal/timemachine
         container_name: timemachine
+        volumes:
+            -   tm_vol:/app/graphs/
+
+volumes:
+    tm_vol:

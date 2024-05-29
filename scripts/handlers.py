@@ -42,7 +42,7 @@ async def process_dialog_calendar(callback_query: CallbackQuery, callback_data: 
             await callback_query.message.answer(
                 digest, parse_mode='html')
             await (callback_query.message.answer
-                   (text="Теперь можешь взглянуть на график распределения категорий новостей этого дня, "
+                   (text="Теперь можешь взглянуть на облако новостей этого дня, "
                          "или попробовать найти самую близкую новость на интересующую тебя тему в тот день.\n\n"
                          "Выбери дальнейший маршрут следования на нижней панели 🔽",
                     reply_markup=make_row_keyboard(action_kb)
@@ -56,7 +56,7 @@ async def process_dialog_calendar(callback_query: CallbackQuery, callback_data: 
                     ))
 
 
-@router.message(ChoiseState.choosing_action, F.text.casefold() == "график")
+@router.message(ChoiseState.choosing_action, F.text.casefold() == "облако")
 async def graph(message: Message, state: FSMContext) -> None:
     data = await state.get_data()
     data['date_news'].plot_categories()
@@ -77,7 +77,7 @@ async def invite_to_search(message: Message, state: FSMContext) -> None:
 
 
 @router.message(ChoiseState.choosing_action, F.text.casefold() == "выбрать другую дату")
-async def choise_another_date(message: Message, state: FSMContext) -> None:
+async def invite_to_search(message: Message, state: FSMContext) -> None:
     await state.clear()
     await state.set_data({})
     await message.answer(

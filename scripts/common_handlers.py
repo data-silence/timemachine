@@ -9,7 +9,7 @@ common_router = Router()
 
 @common_router.message(Command(commands=["start"]))
 @common_router.message(F.text.lower() == "старт")
-async def start_handler(message: Message, state: FSMContext) -> None:
+async def start_handler(message: Message, state: FSMContext):
     await state.set_data({})
     await state.clear()
     await message.answer(
@@ -24,7 +24,7 @@ async def start_handler(message: Message, state: FSMContext) -> None:
 
 @common_router.message(Command(commands=["cancel"]))
 @common_router.message(F.text.lower() == "отмена")
-async def cancel_handler(message: Message, state: FSMContext) -> None:
+async def cancel_handler(message: Message, state: FSMContext):
     await state.clear()
     await state.set_data({})
     await message.answer(
@@ -36,7 +36,7 @@ async def cancel_handler(message: Message, state: FSMContext) -> None:
 
 @common_router.message(Command(commands=["help"]))
 @common_router.message(F.text.lower() == "помощь")
-async def help_handler(message: Message, state: FSMContext) -> None:
+async def help_handler(message: Message, state: FSMContext):
     await message.answer(
         text=help_text,
         reply_markup=await DialogCalendar().start_calendar(2010)
@@ -45,7 +45,7 @@ async def help_handler(message: Message, state: FSMContext) -> None:
 
 
 @common_router.message(Command(commands=["donate"]))
-async def donate_handler(message: Message, state: FSMContext) -> None:
+async def donate_handler(message: Message, state: FSMContext):
     await message.answer(
         text=donate_text,
         reply_markup=await DialogCalendar().start_calendar(2010)
